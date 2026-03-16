@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nexus — Enterprise AI Deployment Platform</title>
-  <meta name="description" content="Nexus helps enterprises ship AI workloads to production seamlessly — from model training to real-time inference at scale." />
+  <title>Helix — Enterprise AI Deployment Platform</title>
+  <meta name="description" content="Helix helps enterprises ship AI workloads to production seamlessly — from model training to real-time inference at scale." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -635,7 +635,7 @@
   <nav id="navbar">
     <a href="#" class="nav-logo">
       <div class="logo-icon">⬡</div>
-      <span>Nexus</span>
+      <span>Helix</span>
     </a>
     <ul class="nav-links">
       <li><a href="#features">Features</a></li>
@@ -682,7 +682,7 @@
       </h1>
 
       <p class="hero-sub">
-        Nexus is the enterprise AI deployment platform that automates model versioning,
+        Helix is the enterprise AI deployment platform that automates model versioning,
         infrastructure scaling, and production monitoring — so your ML teams can focus
         on building, not babysitting.
       </p>
@@ -811,14 +811,14 @@
           <div class="step-num">01</div>
           <div class="step-text">
             <h3>Connect your repo &amp; register your model</h3>
-            <p>Point Nexus at your GitHub repo or upload model artifacts directly. Nexus auto-detects framework, dependencies, and hardware requirements.</p>
+            <p>Point Helix at your GitHub repo or upload model artifacts directly. Helix auto-detects framework, dependencies, and hardware requirements.</p>
           </div>
         </div>
         <div class="step" onclick="activateStep(this, 1)">
           <div class="step-num">02</div>
           <div class="step-text">
             <h3>Configure pipelines and eval gates</h3>
-            <p>Define your promotion criteria — accuracy thresholds, latency budgets, and custom metrics. Nexus runs evaluations automatically on every push.</p>
+            <p>Define your promotion criteria — accuracy thresholds, latency budgets, and custom metrics. Helix runs evaluations automatically on every push.</p>
           </div>
         </div>
         <div class="step" onclick="activateStep(this, 2)">
@@ -835,10 +835,10 @@
           <div class="tab-dot"></div>
           <div class="tab-dot"></div>
           <div class="tab-dot"></div>
-          <span style="margin-left:8px; font-size:0.75rem; color:var(--text-dim); font-family:'JetBrains Mono',monospace;">nexus.yaml</span>
+          <span style="margin-left:8px; font-size:0.75rem; color:var(--text-dim); font-family:'JetBrains Mono',monospace;">helix.yaml</span>
         </div>
         <div class="visual-body" id="codeDisplay">
-          <div class="code-line"><span class="code-comment"># nexus.yaml — deploy config</span></div>
+          <div class="code-line"><span class="code-comment"># helix.yaml — deploy config</span></div>
           <div class="code-line"></div>
           <div class="code-line"><span class="code-keyword">model</span><span class="code-var">:</span></div>
           <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">name</span><span class="code-var">: </span><span class="code-string">fraud-detector-v3</span></div>
@@ -854,7 +854,7 @@
           <div class="code-line">&nbsp;&nbsp;- <span class="code-func">accuracy</span> &gt;= <span class="code-num">0.94</span></div>
           <div class="code-line">&nbsp;&nbsp;- <span class="code-func">f1_score</span> &gt;= <span class="code-num">0.91</span></div>
           <div class="code-line"></div>
-          <div class="code-line"><span class="code-comment"># nexus deploy ✓ gates passed</span></div>
+          <div class="code-line"><span class="code-comment"># helix deploy ✓ gates passed</span></div>
           <div class="code-line"><span class="code-comment"># → canary 10% → prod in 2m 🚀</span><span class="cursor"></span></div>
         </div>
         <div class="visual-status">
@@ -901,7 +901,7 @@
     <div class="testimonials-grid">
       <div class="testimonial-card reveal">
         <div class="quote-icon">"</div>
-        <p class="testimonial-text">Nexus cut our model deployment cycle from 3 weeks to 4 hours. The automatic eval gates alone have saved us from three production incidents in the last quarter.</p>
+        <p class="testimonial-text">Helix cut our model deployment cycle from 3 weeks to 4 hours. The automatic eval gates alone have saved us from three production incidents in the last quarter.</p>
         <div class="testimonial-author">
           <div class="author-avatar">SR</div>
           <div>
@@ -912,7 +912,7 @@
       </div>
       <div class="testimonial-card reveal reveal-delay-1">
         <div class="quote-icon">"</div>
-        <p class="testimonial-text">We were running 14 different internal tools to manage our ML pipeline. Nexus replaced all of them. Our team's productivity tripled in the first month.</p>
+        <p class="testimonial-text">We were running 14 different internal tools to manage our ML pipeline. Helix replaced all of them. Our team's productivity tripled in the first month.</p>
         <div class="testimonial-author">
           <div class="author-avatar">JK</div>
           <div>
@@ -1055,7 +1055,7 @@
       <div class="footer-brand">
         <a href="#" class="nav-logo" style="margin-bottom:0.75rem; display:inline-flex;">
           <div class="logo-icon">⬡</div>
-          <span>Nexus</span>
+          <span>Helix</span>
         </a>
         <p>The enterprise AI deployment platform. Ship models to production with confidence.</p>
       </div>
@@ -1091,7 +1091,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p class="footer-copy">© 2026 Nexus AI, Inc. All rights reserved.</p>
+      <p class="footer-copy">© 2026 Helix AI, Inc. All rights reserved.</p>
       <div class="footer-socials">
         <a href="#" title="Twitter/X">𝕏</a>
         <a href="#" title="GitHub">⌥</a>
@@ -1130,15 +1130,15 @@
     const codePanels = [
       `<div class="code-line"><span class="code-comment"># Step 1: Register your model</span></div>
 <div class="code-line"></div>
-<div class="code-line"><span class="code-var">$ </span><span class="code-func">nexus</span> <span class="code-keyword">init</span></div>
+<div class="code-line"><span class="code-var">$ </span><span class="code-func">helix</span> <span class="code-keyword">init</span></div>
 <div class="code-line"><span class="code-comment">  ✓ Detected: PyTorch 2.1 · CUDA 12.1</span></div>
 <div class="code-line"><span class="code-comment">  ✓ Artifact: ./checkpoints/best.pt</span></div>
 <div class="code-line"><span class="code-comment">  ✓ Requirements: requirements.txt</span></div>
 <div class="code-line"></div>
-<div class="code-line"><span class="code-var">$ </span><span class="code-func">nexus</span> <span class="code-keyword">register</span> <span class="code-string">fraud-detector-v3</span></div>
+<div class="code-line"><span class="code-var">$ </span><span class="code-func">helix</span> <span class="code-keyword">register</span> <span class="code-string">fraud-detector-v3</span></div>
 <div class="code-line"><span class="code-comment">  → Uploading artifacts... done</span></div>
 <div class="code-line"><span class="code-comment">  → Model ID: mdl_7f3a9b2c ✓</span></div>
-<div class="code-line"><span class="code-comment">  → Registry: nexus.ai/org/models</span><span class="cursor"></span></div>`,
+<div class="code-line"><span class="code-comment">  → Registry: helix.ai/org/models</span><span class="cursor"></span></div>`,
 
       `<div class="code-line"><span class="code-comment"># Step 2: Configure pipeline</span></div>
 <div class="code-line"></div>
@@ -1156,7 +1156,7 @@
 
       `<div class="code-line"><span class="code-comment"># Step 3: Deploy & monitor</span></div>
 <div class="code-line"></div>
-<div class="code-line"><span class="code-var">$ </span><span class="code-func">nexus</span> <span class="code-keyword">deploy</span></div>
+<div class="code-line"><span class="code-var">$ </span><span class="code-func">helix</span> <span class="code-keyword">deploy</span></div>
 <div class="code-line"><span class="code-comment">  ✓ Gates passed (acc: 0.96, p99: 112ms)</span></div>
 <div class="code-line"><span class="code-comment">  → Canary: 10% traffic · 2m warmup</span></div>
 <div class="code-line"><span class="code-comment">  → Canary stable · promoting to 100%</span></div>
