@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexus — Enterprise AI Deployment Platform</title>
+  <meta name="description" content="Nexus helps enterprises ship AI workloads to production seamlessly — from model training to real-time inference at scale." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #050810;
+      --bg-card: #0d1117;
+      --bg-card2: #111827;
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(99,102,241,0.5);
+      --text: #f0f4ff;
+      --text-muted: #8b95a9;
+      --text-dim: #4b5563;
+      --accent: #6366f1;
+      --accent2: #8b5cf6;
+      --accent3: #06b6d4;
+      --green: #10b981;
+      --red: #ef4444;
+      --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+      --gradient-subtle: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(139,92,246,0.15) 100%);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 5rem);
+      height: 68px;
+      background: rgba(5,8,16,0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+    nav.scrolled { background: rgba(5,8,16,0.95); }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em;
+      text-decoration: none; color: var(--text);
+    }
+    .nav-logo .logo-icon {
+      width: 34px; height: 34px;
+      background: var(--gradient);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .nav-logo span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .nav-links {
+      display: flex; gap: 2rem; list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      display: flex; gap: 0.75rem; align-items: center;
+    }
+    .btn-ghost {
+      background: none; border: 1px solid var(--border);
+      color: var(--text-muted); padding: 0.5rem 1.1rem;
+      border-radius: 8px; font-size: 0.875rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; font-family: inherit;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+
+    .btn-primary {
+      background: var(--gradient); border: none;
+      color: #fff; padding: 0.55rem 1.3rem;
+      border-radius: 8px; font-size: 0.875rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s; font-family: inherit;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(255,255,255,0); transition: 0.2s;
+    }
+    .btn-primary:hover::after { background: rgba(255,255,255,0.1); }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { width: 22px; height: 2px; background: var(--text-muted); border-radius: 2px; transition: 0.3s; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px clamp(1.5rem, 5vw, 5rem) 6rem;
+      position: relative; overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99,102,241,0.18) 0%, transparent 70%),
+                  radial-gradient(ellipse 40% 40% at 20% 60%, rgba(139,92,246,0.1) 0%, transparent 60%),
+                  radial-gradient(ellipse 40% 40% at 80% 60%, rgba(6,182,212,0.08) 0%, transparent 60%);
+    }
+
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0; opacity: 0.3;
+      background-image:
+        linear-gradient(rgba(99,102,241,0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,0.15) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 80%);
+    }
+
+    /* Floating orbs */
+    .orb {
+      position: absolute; border-radius: 50%; filter: blur(80px);
+      animation: float 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .orb-1 { width: 400px; height: 400px; background: rgba(99,102,241,0.12); top: 10%; left: 5%; animation-delay: 0s; }
+    .orb-2 { width: 300px; height: 300px; background: rgba(139,92,246,0.12); top: 20%; right: 8%; animation-delay: -3s; }
+    .orb-3 { width: 250px; height: 250px; background: rgba(6,182,212,0.08); bottom: 20%; left: 15%; animation-delay: -5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      33% { transform: translateY(-20px) scale(1.05); }
+      66% { transform: translateY(10px) scale(0.97); }
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 860px; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3);
+      padding: 6px 16px; border-radius: 100px;
+      font-size: 0.8rem; font-weight: 500; color: #a5b4fc;
+      margin-bottom: 2rem;
+      animation: fadeInDown 0.6s ease both;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    h1 {
+      font-size: clamp(2.6rem, 7vw, 5rem);
+      font-weight: 900; line-height: 1.08; letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 0.7s ease 0.1s both;
+    }
+    h1 .gradient-text {
+      background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem;
+      font-weight: 400; line-height: 1.7;
+      animation: fadeInUp 0.7s ease 0.2s both;
+    }
+
+    .hero-actions {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 3.5rem;
+      animation: fadeInUp 0.7s ease 0.3s both;
+    }
+    .btn-large {
+      padding: 0.85rem 2rem; font-size: 1rem; border-radius: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .btn-large svg { transition: transform 0.2s; }
+    .btn-large:hover svg { transform: translateX(3px); }
+    .btn-outline-large {
+      background: none; border: 1px solid var(--border);
+      color: var(--text); padding: 0.85rem 2rem;
+      border-radius: 10px; font-size: 1rem; font-weight: 500;
+      cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-outline-large:hover { border-color: var(--accent); background: rgba(99,102,241,0.06); }
+
+    .hero-stats {
+      display: flex; gap: 3rem; justify-content: center; flex-wrap: wrap;
+      animation: fadeInUp 0.7s ease 0.4s both;
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+    .stat-num .gradient-text { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+
+    /* ── LOGOS ── */
+    .logos-section {
+      padding: 3rem clamp(1.5rem, 5vw, 5rem);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .logos-label {
+      font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 2rem;
+    }
+    .logos-track {
+      display: flex; gap: 3rem; justify-content: center;
+      align-items: center; flex-wrap: wrap;
+    }
+    .logo-item {
+      font-size: 0.95rem; font-weight: 700; color: var(--text-dim);
+      letter-spacing: 0.05em; transition: color 0.2s; cursor: default;
+      opacity: 0.5;
+    }
+    .logo-item:hover { color: var(--text-muted); opacity: 0.8; }
+
+    /* ── SECTIONS COMMON ── */
+    section { padding: 6rem clamp(1.5rem, 5vw, 5rem); }
+
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.78rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.12em; color: #a5b4fc;
+      margin-bottom: 1rem;
+    }
+    .section-label::before {
+      content: ''; width: 20px; height: 2px; background: var(--gradient); border-radius: 2px;
+    }
+
+    .section-title {
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      font-weight: 800; letter-spacing: -0.025em; line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+    .section-sub {
+      font-size: 1.05rem; color: var(--text-muted); max-width: 560px; line-height: 1.75;
+    }
+    .text-center { text-align: center; }
+    .text-center .section-sub { margin: 0 auto; }
+    .text-center .section-label { justify-content: center; }
+
+    /* ── FEATURES ── */
+    #features { background: linear-gradient(to bottom, var(--bg), #060b18, var(--bg)); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 4rem;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      padding: 2.5rem;
+      transition: background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: var(--gradient); opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .feature-card:hover { background: var(--bg-card2); }
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-icon {
+      width: 48px; height: 48px;
+      background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 1.25rem;
+    }
+    .feature-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .feature-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* ── HOW IT WORKS ── */
+    #how {
+      background: linear-gradient(to bottom, var(--bg), #07091a, var(--bg));
+    }
+
+    .how-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+      margin-top: 4rem;
+    }
+
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step {
+      display: flex; gap: 1.5rem;
+      padding: 1.75rem 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: all 0.2s;
+      position: relative;
+    }
+    .step:last-child { border-bottom: none; }
+    .step-num {
+      flex-shrink: 0;
+      width: 42px; height: 42px; border-radius: 12px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.875rem; font-weight: 700; color: var(--text-muted);
+      transition: all 0.3s;
+    }
+    .step.active .step-num {
+      background: var(--gradient); color: #fff; border-color: transparent;
+    }
+    .step-text h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .step-text p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+
+    .how-visual {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      position: relative; aspect-ratio: 4/3;
+    }
+    .visual-tab-bar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 12px 16px; background: var(--bg-card2);
+      border-bottom: 1px solid var(--border);
+    }
+    .tab-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .tab-dot:nth-child(1) { background: #ef4444; }
+    .tab-dot:nth-child(2) { background: #f59e0b; }
+    .tab-dot:nth-child(3) { background: #10b981; }
+    .visual-body { padding: 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
+
+    .code-line { padding: 2px 0; line-height: 1.8; }
+    .code-comment { color: #4b5563; }
+    .code-keyword { color: #8b5cf6; }
+    .code-string { color: #10b981; }
+    .code-func { color: #06b6d4; }
+    .code-num { color: #f59e0b; }
+    .code-var { color: #f0f4ff; }
+    .code-line .cursor {
+      display: inline-block; width: 2px; height: 1em; background: var(--accent);
+      vertical-align: middle; animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    .visual-status {
+      position: absolute; bottom: 1.25rem; right: 1.25rem;
+      background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3);
+      padding: 4px 12px; border-radius: 100px;
+      font-size: 0.75rem; color: #10b981; font-weight: 500;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .visual-status .live-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #10b981;
+      animation: pulse 2s infinite;
+    }
+
+    /* ── METRICS ── */
+    .metrics-section {
+      background: linear-gradient(135deg, #060b18 0%, #07091a 100%);
+      padding: 5rem clamp(1.5rem, 5vw, 5rem);
+    }
+    .metrics-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      margin-top: 3rem;
+    }
+    .metric-card {
+      background: var(--bg-card); padding: 2.5rem 2rem; text-align: center;
+      transition: background 0.3s;
+    }
+    .metric-card:hover { background: var(--bg-card2); }
+    .metric-num {
+      font-size: 2.8rem; font-weight: 900; letter-spacing: -0.04em;
+      background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+    .metric-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials { background: var(--bg); }
+
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .testimonial-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 2rem;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .testimonial-card:hover {
+      border-color: rgba(99,102,241,0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .quote-icon { font-size: 2rem; color: var(--accent); opacity: 0.5; margin-bottom: 1rem; line-height: 1; }
+    .testimonial-text { font-size: 0.93rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 1.5rem; }
+    .testimonial-author { display: flex; align-items: center; gap: 0.75rem; }
+    .author-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--gradient); display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+    }
+    .author-name { font-size: 0.9rem; font-weight: 600; }
+    .author-role { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ── WAITLIST ── */
+    #waitlist {
+      background: linear-gradient(135deg, #06080f 0%, #0a0d1a 50%, #06080f 100%);
+      position: relative; overflow: hidden;
+    }
+    #waitlist .hero-bg {
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(99,102,241,0.12) 0%, transparent 70%);
+    }
+    .waitlist-inner {
+      max-width: 640px; margin: 0 auto; text-align: center; position: relative; z-index: 1;
+    }
+    .waitlist-inner .section-title { font-size: clamp(2rem, 4.5vw, 3.2rem); }
+    .waitlist-inner .section-sub { font-size: 1rem; margin: 1rem auto 2.5rem; }
+
+    .waitlist-form {
+      display: flex; gap: 0.75rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 6px 6px 6px 1.25rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.3s;
+    }
+    .waitlist-form:focus-within { border-color: var(--accent); }
+    .waitlist-input {
+      flex: 1; background: none; border: none; outline: none;
+      color: var(--text); font-size: 0.95rem; font-family: inherit;
+      min-width: 0;
+    }
+    .waitlist-input::placeholder { color: var(--text-dim); }
+    .btn-join {
+      background: var(--gradient); border: none; color: #fff;
+      padding: 0.75rem 1.75rem; border-radius: 8px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      font-family: inherit; white-space: nowrap;
+      transition: opacity 0.2s; flex-shrink: 0;
+    }
+    .btn-join:hover { opacity: 0.9; }
+    .btn-join:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .waitlist-note { font-size: 0.8rem; color: var(--text-dim); }
+    .waitlist-note span { color: var(--green); }
+
+    .success-msg {
+      display: none;
+      background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 12px; padding: 1.25rem 1.5rem;
+      text-align: center;
+    }
+    .success-msg.show { display: block; }
+    .success-msg p { color: #10b981; font-weight: 500; margin-bottom: 0.3rem; }
+    .success-msg small { color: var(--text-muted); font-size: 0.83rem; }
+
+    .waitlist-counters {
+      display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+      margin-top: 2.5rem;
+    }
+    .wl-counter {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.85rem; color: var(--text-muted);
+    }
+    .wl-counter .icon { font-size: 1rem; }
+
+    /* ── PRICING ── */
+    #pricing { background: var(--bg); }
+
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; margin-top: 3rem; align-items: start;
+    }
+    .pricing-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2.25rem; transition: all 0.3s;
+      position: relative;
+    }
+    .pricing-card:hover { transform: translateY(-4px); box-shadow: 0 25px 60px rgba(0,0,0,0.3); }
+    .pricing-card.featured {
+      border-color: var(--accent); background: linear-gradient(180deg, rgba(99,102,241,0.06) 0%, var(--bg-card) 100%);
+    }
+    .pricing-card.featured::before {
+      content: 'Most Popular';
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--gradient); color: #fff;
+      padding: 4px 16px; border-radius: 100px; font-size: 0.75rem; font-weight: 600;
+    }
+    .plan-name { font-size: 0.875rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .plan-price {
+      font-size: 3rem; font-weight: 900; letter-spacing: -0.04em; margin: 0.75rem 0 0.25rem;
+    }
+    .plan-price sub { font-size: 1rem; font-weight: 500; color: var(--text-muted); vertical-align: middle; }
+    .plan-desc { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.75rem; }
+    .plan-divider { height: 1px; background: var(--border); margin-bottom: 1.75rem; }
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
+    .plan-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.875rem; color: var(--text-muted);
+    }
+    .plan-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .plan-features li.disabled { opacity: 0.35; }
+    .plan-features li.disabled::before { content: '×'; color: var(--red); }
+    .btn-plan {
+      width: 100%; padding: 0.75rem; border-radius: 8px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      font-family: inherit; transition: all 0.2s;
+    }
+    .btn-plan-outline {
+      background: none; border: 1px solid var(--border); color: var(--text);
+    }
+    .btn-plan-outline:hover { border-color: var(--accent); }
+    .btn-plan-filled {
+      background: var(--gradient); border: none; color: #fff;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #040608;
+      border-top: 1px solid var(--border);
+      padding: 4rem clamp(1.5rem, 5vw, 5rem) 2rem;
+    }
+    .footer-top {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem; margin-bottom: 3rem;
+    }
+    .footer-brand p { font-size: 0.875rem; color: var(--text-muted); margin-top: 0.75rem; max-width: 260px; line-height: 1.7; }
+    .footer-col h4 { font-size: 0.875rem; font-weight: 600; margin-bottom: 1.25rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+    .footer-col ul li a {
+      font-size: 0.85rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: var(--text); }
+    .footer-bottom {
+      border-top: 1px solid var(--border); padding-top: 1.75rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: gap;
+      gap: 1rem;
+    }
+    .footer-copy { font-size: 0.8rem; color: var(--text-dim); }
+    .footer-socials { display: flex; gap: 1rem; }
+    .footer-socials a {
+      width: 34px; height: 34px; border-radius: 8px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted); text-decoration: none; font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .footer-socials a:hover { border-color: var(--accent); color: var(--text); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .nav-cta .btn-ghost { display: none; }
+      .hamburger { display: flex; }
+      .how-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .how-visual { max-width: 100%; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .hero-stats { gap: 1.75rem; }
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .waitlist-form { flex-direction: column; padding: 0.75rem; }
+      .btn-join { width: 100%; padding: 0.75rem; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── MOBILE MENU ── */
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 68px; left: 0; right: 0; z-index: 99;
+      background: rgba(5,8,16,0.98); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem;
+      flex-direction: column; gap: 1.25rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--text-muted); text-decoration: none; font-size: 1rem; font-weight: 500;
+      padding: 0.5rem 0;
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">
+      <div class="logo-icon">⬡</div>
+      <span>Nexus</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#testimonials">Customers</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="btn-ghost" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Sign in</button>
+      <button class="btn-primary" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Join waitlist</button>
+    </div>
+    <div class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#features" onclick="closeMobile()">Features</a>
+    <a href="#how" onclick="closeMobile()">How it works</a>
+    <a href="#pricing" onclick="closeMobile()">Pricing</a>
+    <a href="#testimonials" onclick="closeMobile()">Customers</a>
+    <button class="btn-primary btn-large" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'}); closeMobile()">Join waitlist →</button>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Now in private beta — 2,400+ enterprises on the waitlist
+      </div>
+
+      <h1>
+        Ship AI Workloads<br/>
+        <span class="gradient-text">From Dev to Production</span><br/>
+        Without the Chaos
+      </h1>
+
+      <p class="hero-sub">
+        Nexus is the enterprise AI deployment platform that automates model versioning,
+        infrastructure scaling, and production monitoring — so your ML teams can focus
+        on building, not babysitting.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn-primary btn-large" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">
+          Request early access
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="btn-outline-large" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7 6.5l4 2.5-4 2.5V6.5z" fill="currentColor"/>
+          </svg>
+          See how it works
+        </button>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num"><span class="gradient-text">99.97%</span></div>
+          <div class="stat-label">Uptime SLA</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num"><span class="gradient-text">&lt;200ms</span></div>
+          <div class="stat-label">Avg. Inference Latency</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num"><span class="gradient-text">10×</span></div>
+          <div class="stat-label">Faster Deployments</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num"><span class="gradient-text">SOC2</span></div>
+          <div class="stat-label">Type II Certified</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGOS -->
+  <div class="logos-section">
+    <p class="logos-label">Trusted by engineering teams at</p>
+    <div class="logos-track">
+      <div class="logo-item">ACMEBANK</div>
+      <div class="logo-item">SYNTHETIX</div>
+      <div class="logo-item">VERIDIAN</div>
+      <div class="logo-item">AXIOM LABS</div>
+      <div class="logo-item">CORELOGIC</div>
+      <div class="logo-item">LUMINARY</div>
+      <div class="logo-item">ORBIS INC</div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="text-center reveal">
+      <div class="section-label">Platform Capabilities</div>
+      <h2 class="section-title">Everything your AI team needs,<br/>nothing they don't</h2>
+      <p class="section-sub">
+        Built for the enterprise ML lifecycle — from experimentation to high-traffic production inference at scale.
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">🚀</div>
+        <h3 class="feature-title">One-Click Deployments</h3>
+        <p class="feature-desc">Deploy any model — PyTorch, TensorFlow, JAX, or ONNX — to production with a single command. Blue-green and canary rollouts built in.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon">⚖️</div>
+        <h3 class="feature-title">Auto-Scaling Inference</h3>
+        <p class="feature-desc">Automatically scales GPU/CPU resources from zero to thousands of replicas based on real-time traffic. Pay only for what you use.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon">📊</div>
+        <h3 class="feature-title">Model Observability</h3>
+        <p class="feature-desc">Track latency, throughput, accuracy drift, and data skew across every model version. Catch regressions before users do.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔄</div>
+        <h3 class="feature-title">CI/CD for ML</h3>
+        <p class="feature-desc">Plug into GitHub Actions, GitLab CI, or Jenkins. Automated evaluation gates block bad models from reaching production.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon">🔐</div>
+        <h3 class="feature-title">Enterprise Security</h3>
+        <p class="feature-desc">VPC isolation, mTLS, RBAC, audit logs, and HIPAA/GDPR compliance. Deploy in your own cloud or on-prem.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon">🗂️</div>
+        <h3 class="feature-title">Model Registry</h3>
+        <p class="feature-desc">Version, tag, and lineage-track every artifact. Full provenance from training data to serving endpoint — always reproducible.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">⚡</div>
+        <h3 class="feature-title">Hardware Optimization</h3>
+        <p class="feature-desc">Automatic quantization, batching, and kernel fusion to maximize throughput on A100s, H100s, or commodity CPUs.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon">🌐</div>
+        <h3 class="feature-title">Multi-Cloud &amp; Hybrid</h3>
+        <p class="feature-desc">Run workloads across AWS, GCP, Azure, and on-prem simultaneously. Smart routing keeps costs low and latency lower.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon">🤝</div>
+        <h3 class="feature-title">Team Collaboration</h3>
+        <p class="feature-desc">Shared experiment tracking, A/B testing dashboards, and automated rollback notifications keep every stakeholder in sync.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="reveal">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">From notebook to production<br/>in minutes, not months</h2>
+      <p class="section-sub">Three steps. Zero infrastructure headaches.</p>
+    </div>
+
+    <div class="how-grid">
+      <div class="steps">
+        <div class="step active" onclick="activateStep(this, 0)">
+          <div class="step-num">01</div>
+          <div class="step-text">
+            <h3>Connect your repo &amp; register your model</h3>
+            <p>Point Nexus at your GitHub repo or upload model artifacts directly. Nexus auto-detects framework, dependencies, and hardware requirements.</p>
+          </div>
+        </div>
+        <div class="step" onclick="activateStep(this, 1)">
+          <div class="step-num">02</div>
+          <div class="step-text">
+            <h3>Configure pipelines and eval gates</h3>
+            <p>Define your promotion criteria — accuracy thresholds, latency budgets, and custom metrics. Nexus runs evaluations automatically on every push.</p>
+          </div>
+        </div>
+        <div class="step" onclick="activateStep(this, 2)">
+          <div class="step-num">03</div>
+          <div class="step-text">
+            <h3>Deploy with one click, monitor forever</h3>
+            <p>Push to production with confidence. Continuous monitoring catches drift and anomalies. One-click rollback if anything goes wrong.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-visual">
+        <div class="visual-tab-bar">
+          <div class="tab-dot"></div>
+          <div class="tab-dot"></div>
+          <div class="tab-dot"></div>
+          <span style="margin-left:8px; font-size:0.75rem; color:var(--text-dim); font-family:'JetBrains Mono',monospace;">nexus.yaml</span>
+        </div>
+        <div class="visual-body" id="codeDisplay">
+          <div class="code-line"><span class="code-comment"># nexus.yaml — deploy config</span></div>
+          <div class="code-line"></div>
+          <div class="code-line"><span class="code-keyword">model</span><span class="code-var">:</span></div>
+          <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">name</span><span class="code-var">: </span><span class="code-string">fraud-detector-v3</span></div>
+          <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">framework</span><span class="code-var">: </span><span class="code-string">pytorch</span></div>
+          <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">artifact</span><span class="code-var">: </span><span class="code-string">./checkpoints/best.pt</span></div>
+          <div class="code-line"></div>
+          <div class="code-line"><span class="code-keyword">serving</span><span class="code-var">:</span></div>
+          <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">replicas</span><span class="code-var">: </span><span class="code-num">auto</span></div>
+          <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">hardware</span><span class="code-var">: </span><span class="code-string">gpu-t4</span></div>
+          <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">max_latency_ms</span><span class="code-var">: </span><span class="code-num">150</span></div>
+          <div class="code-line"></div>
+          <div class="code-line"><span class="code-keyword">gates</span><span class="code-var">:</span></div>
+          <div class="code-line">&nbsp;&nbsp;- <span class="code-func">accuracy</span> &gt;= <span class="code-num">0.94</span></div>
+          <div class="code-line">&nbsp;&nbsp;- <span class="code-func">f1_score</span> &gt;= <span class="code-num">0.91</span></div>
+          <div class="code-line"></div>
+          <div class="code-line"><span class="code-comment"># nexus deploy ✓ gates passed</span></div>
+          <div class="code-line"><span class="code-comment"># → canary 10% → prod in 2m 🚀</span><span class="cursor"></span></div>
+        </div>
+        <div class="visual-status">
+          <span class="live-dot"></span>
+          Live · fraud-detector-v3
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METRICS -->
+  <div class="metrics-section">
+    <div class="text-center reveal">
+      <div class="section-label">By the Numbers</div>
+      <h2 class="section-title">Built for production scale</h2>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-card reveal">
+        <div class="metric-num">10B+</div>
+        <div class="metric-label">Inference requests/month</div>
+      </div>
+      <div class="metric-card reveal reveal-delay-1">
+        <div class="metric-num">2.4ms</div>
+        <div class="metric-label">P99 cold-start latency</div>
+      </div>
+      <div class="metric-card reveal reveal-delay-2">
+        <div class="metric-num">340+</div>
+        <div class="metric-label">Enterprise customers</div>
+      </div>
+      <div class="metric-card reveal reveal-delay-3">
+        <div class="metric-num">68%</div>
+        <div class="metric-label">Avg. infra cost reduction</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="text-center reveal">
+      <div class="section-label">Customer Stories</div>
+      <h2 class="section-title">Loved by ML engineers,<br/>trusted by CTOs</h2>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="quote-icon">"</div>
+        <p class="testimonial-text">Nexus cut our model deployment cycle from 3 weeks to 4 hours. The automatic eval gates alone have saved us from three production incidents in the last quarter.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">SR</div>
+          <div>
+            <div class="author-name">Sophia Raines</div>
+            <div class="author-role">VP of Engineering · Veridian Health</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="quote-icon">"</div>
+        <p class="testimonial-text">We were running 14 different internal tools to manage our ML pipeline. Nexus replaced all of them. Our team's productivity tripled in the first month.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">JK</div>
+          <div>
+            <div class="author-name">James Ko</div>
+            <div class="author-role">Head of AI · Axiom Labs</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="quote-icon">"</div>
+        <p class="testimonial-text">The observability layer is a game-changer. We caught a data drift issue affecting our recommendation model two hours before it would have impacted 4M users.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">ML</div>
+          <div>
+            <div class="author-name">Maria Lourdes</div>
+            <div class="author-role">Principal MLOps · Synthetix</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="text-center reveal">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Transparent pricing,<br/>no surprises</h2>
+      <p class="section-sub">Start free, scale as you grow. All plans include SOC2 compliance and 24/7 support.</p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="pricing-card reveal">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">$0<sub>/mo</sub></div>
+        <div class="plan-desc">For teams exploring MLOps practices</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>3 production endpoints</li>
+          <li>1M inference requests/mo</li>
+          <li>Basic monitoring &amp; alerts</li>
+          <li>Community support</li>
+          <li class="disabled">Custom hardware</li>
+          <li class="disabled">VPC deployment</li>
+        </ul>
+        <button class="btn-plan btn-plan-outline" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Join waitlist</button>
+      </div>
+
+      <div class="pricing-card featured reveal reveal-delay-1">
+        <div class="plan-name">Growth</div>
+        <div class="plan-price">$599<sub>/mo</sub></div>
+        <div class="plan-desc">For scaling AI teams shipping fast</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>Unlimited endpoints</li>
+          <li>50M inference requests/mo</li>
+          <li>Advanced observability &amp; drift detection</li>
+          <li>CI/CD pipeline integrations</li>
+          <li>GPU auto-scaling</li>
+          <li>Priority Slack support</li>
+        </ul>
+        <button class="btn-plan btn-plan-filled" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Join waitlist</button>
+      </div>
+
+      <div class="pricing-card reveal reveal-delay-2">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price" style="font-size:2rem; padding-top:0.3rem;">Custom</div>
+        <div class="plan-desc">For large orgs with complex requirements</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>Everything in Growth</li>
+          <li>On-prem &amp; VPC deployment</li>
+          <li>SSO / SAML &amp; RBAC</li>
+          <li>Custom SLA &amp; uptime guarantees</li>
+          <li>Dedicated infrastructure</li>
+          <li>White-glove onboarding</li>
+        </ul>
+        <button class="btn-plan btn-plan-outline" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Talk to sales</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAITLIST -->
+  <section id="waitlist">
+    <div class="hero-bg"></div>
+    <div class="waitlist-inner">
+      <div class="section-label" style="justify-content:center;">Early Access</div>
+      <h2 class="section-title">
+        Be first to ship AI<br/>
+        <span style="background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">at enterprise scale</span>
+      </h2>
+      <p class="section-sub">
+        Join 2,400+ ML engineers and AI teams already on the waitlist.
+        Early access members get 3 months free on Growth plan + dedicated onboarding.
+      </p>
+
+      <form id="waitlistForm" onsubmit="handleWaitlist(event)">
+        <div class="waitlist-form" id="formBox">
+          <input
+            type="email"
+            class="waitlist-input"
+            id="emailInput"
+            placeholder="your@company.com"
+            required
+            autocomplete="email"
+          />
+          <button type="submit" class="btn-join" id="joinBtn">
+            Request access →
+          </button>
+        </div>
+        <p class="waitlist-note">
+          <span>✓</span> No spam. Unsubscribe anytime. We'll email you when your spot is ready.
+        </p>
+      </form>
+
+      <div class="success-msg" id="successMsg">
+        <p>🎉 You're on the list!</p>
+        <small>We'll be in touch soon. Check your inbox for a confirmation email.</small>
+      </div>
+
+      <div class="waitlist-counters">
+        <div class="wl-counter">
+          <span class="icon">👥</span>
+          <span><strong id="wlCount">2,417</strong> engineers joined</span>
+        </div>
+        <div class="wl-counter">
+          <span class="icon">🔒</span>
+          <span>SOC2 Type II certified</span>
+        </div>
+        <div class="wl-counter">
+          <span class="icon">⚡</span>
+          <span>Ships Q2 2026</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo" style="margin-bottom:0.75rem; display:inline-flex;">
+          <div class="logo-icon">⬡</div>
+          <span>Nexus</span>
+        </a>
+        <p>The enterprise AI deployment platform. Ship models to production with confidence.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#">Features</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Changelog</a></li>
+          <li><a href="#">Roadmap</a></li>
+          <li><a href="#">Status</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Developers</h4>
+        <ul>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">SDK</a></li>
+          <li><a href="#">Integrations</a></li>
+          <li><a href="#">Community</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Nexus AI, Inc. All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="#" title="Twitter/X">𝕏</a>
+        <a href="#" title="GitHub">⌥</a>
+        <a href="#" title="LinkedIn">in</a>
+        <a href="#" title="Discord">◈</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Navbar scroll effect ──
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // ── Mobile menu ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+    });
+    function closeMobile() { mobileMenu.classList.remove('open'); }
+    document.addEventListener('click', (e) => {
+      if (!navbar.contains(e.target)) closeMobile();
+    });
+
+    // ── Reveal on scroll ──
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    // ── How it works step switcher ──
+    const codePanels = [
+      `<div class="code-line"><span class="code-comment"># Step 1: Register your model</span></div>
+<div class="code-line"></div>
+<div class="code-line"><span class="code-var">$ </span><span class="code-func">nexus</span> <span class="code-keyword">init</span></div>
+<div class="code-line"><span class="code-comment">  ✓ Detected: PyTorch 2.1 · CUDA 12.1</span></div>
+<div class="code-line"><span class="code-comment">  ✓ Artifact: ./checkpoints/best.pt</span></div>
+<div class="code-line"><span class="code-comment">  ✓ Requirements: requirements.txt</span></div>
+<div class="code-line"></div>
+<div class="code-line"><span class="code-var">$ </span><span class="code-func">nexus</span> <span class="code-keyword">register</span> <span class="code-string">fraud-detector-v3</span></div>
+<div class="code-line"><span class="code-comment">  → Uploading artifacts... done</span></div>
+<div class="code-line"><span class="code-comment">  → Model ID: mdl_7f3a9b2c ✓</span></div>
+<div class="code-line"><span class="code-comment">  → Registry: nexus.ai/org/models</span><span class="cursor"></span></div>`,
+
+      `<div class="code-line"><span class="code-comment"># Step 2: Configure pipeline</span></div>
+<div class="code-line"></div>
+<div class="code-line"><span class="code-keyword">pipeline</span><span class="code-var">:</span></div>
+<div class="code-line">&nbsp;&nbsp;<span class="code-keyword">trigger</span><span class="code-var">: </span><span class="code-string">push:main</span></div>
+<div class="code-line">&nbsp;&nbsp;<span class="code-keyword">stages</span><span class="code-var">:</span></div>
+<div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;- <span class="code-func">evaluate</span></div>
+<div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;- <span class="code-func">load_test</span></div>
+<div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;- <span class="code-func">canary</span></div>
+<div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;- <span class="code-func">promote</span></div>
+<div class="code-line"></div>
+<div class="code-line"><span class="code-keyword">gates</span><span class="code-var">:</span></div>
+<div class="code-line">&nbsp;&nbsp;- <span class="code-func">accuracy</span> >= <span class="code-num">0.94</span></div>
+<div class="code-line">&nbsp;&nbsp;- <span class="code-func">p99_latency</span> <= <span class="code-num">150ms</span><span class="cursor"></span></div>`,
+
+      `<div class="code-line"><span class="code-comment"># Step 3: Deploy & monitor</span></div>
+<div class="code-line"></div>
+<div class="code-line"><span class="code-var">$ </span><span class="code-func">nexus</span> <span class="code-keyword">deploy</span></div>
+<div class="code-line"><span class="code-comment">  ✓ Gates passed (acc: 0.96, p99: 112ms)</span></div>
+<div class="code-line"><span class="code-comment">  → Canary: 10% traffic · 2m warmup</span></div>
+<div class="code-line"><span class="code-comment">  → Canary stable · promoting to 100%</span></div>
+<div class="code-line"><span class="code-comment">  ✓ Production: fraud-detector-v3 LIVE</span></div>
+<div class="code-line"></div>
+<div class="code-line"><span class="code-comment"># Live metrics (last 5m):</span></div>
+<div class="code-line">&nbsp;&nbsp;<span class="code-func">throughput</span>: <span class="code-num">12,400 req/s</span></div>
+<div class="code-line">&nbsp;&nbsp;<span class="code-func">p99_latency</span>: <span class="code-num">118ms</span></div>
+<div class="code-line">&nbsp;&nbsp;<span class="code-func">error_rate</span>: <span class="code-num">0.002%</span><span class="cursor"></span></div>`
+    ];
+
+    function activateStep(el, idx) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('codeDisplay').innerHTML = codePanels[idx];
+    }
+
+    // ── Waitlist form ──
+    let waitlistCount = 2417;
+    function handleWaitlist(e) {
+      e.preventDefault();
+      const email = document.getElementById('emailInput').value.trim();
+      if (!email) return;
+
+      const btn = document.getElementById('joinBtn');
+      btn.disabled = true;
+      btn.textContent = 'Joining...';
+
+      setTimeout(() => {
+        document.getElementById('waitlistForm').style.display = 'none';
+        document.getElementById('successMsg').classList.add('show');
+        waitlistCount++;
+        document.getElementById('wlCount').textContent = waitlistCount.toLocaleString();
+      }, 800);
+    }
+
+    // ── Smooth nav link clicks ──
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+  </script>
+</body>
+</html>
